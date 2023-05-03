@@ -1,6 +1,9 @@
 import {
   Controller,
-  Get
+  Get,
+  NotFoundException,
+  Param,
+  ParseUUIDPipe
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 
@@ -11,5 +14,12 @@ export class BooksController {
   @Get('/')
   getAll(): any {
     return this.booksService.getAll();
+  }
+
+  @Get('/:id')
+  async getById(@Param('id', new ParseUUIDPipe()) id: string) {
+    const book = await this.booksService.getById(id);
+    if (!book) throw new NotFoundException('Book not found');
+    return book;
   }
 }
