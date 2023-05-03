@@ -5,10 +5,12 @@ import {
   NotFoundException,
   Param,
   ParseUUIDPipe,
-  Post
+  Post,
+  Put
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDTO } from './dtos/create-book.dto';
+import { UpdateBookDTO } from './dtos/update-book.dto';
 
 @Controller('books')
 export class BooksController {
@@ -22,12 +24,24 @@ export class BooksController {
   @Get('/:id')
   async getById(@Param('id', new ParseUUIDPipe()) id: string) {
     const book = await this.booksService.getById(id);
-    if (!book) throw new NotFoundException('Book not found');
+    if (!book) throw new NotFoundException("Book not found");
     return book;
   }
 
   @Post('/')
   create(@Body() bookData: CreateBookDTO) {
     return this.booksService.create(bookData);
+  }
+
+  @Put('/:id')
+  async updateById(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() bookData: UpdateBookDTO
+  ) {
+    if (!(await this.booksService.getById(id)))
+      throw new NotFoundException("Book not found");
+
+    await this.booksService.updateById(id, bookData);
+    return { success: true };
   }
 }
