@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty, IsString, Length } from "class-validator";
 import { Match } from "src/utils/match.decorator";
 
-class RegisterDTO {
+export class RegisterDTO {
   @IsNotEmpty()
   @IsEmail()
   email: string;
