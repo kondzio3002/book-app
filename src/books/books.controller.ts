@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -42,6 +43,15 @@ export class BooksController {
       throw new NotFoundException("Book not found");
 
     await this.booksService.updateById(id, bookData);
+    return { success: true };
+  }
+
+  @Delete('/:id')
+  async deleteById(@Param('id', new ParseUUIDPipe()) id: string) {
+    if (!(await this.booksService.getById(id)))
+      throw new NotFoundException('Book not found');
+
+    await this.booksService.deleteById(id);
     return { success: true };
   }
 }
