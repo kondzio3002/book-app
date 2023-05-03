@@ -1,11 +1,14 @@
 import {
+  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
-  ParseUUIDPipe
+  ParseUUIDPipe,
+  Post
 } from '@nestjs/common';
 import { BooksService } from './books.service';
+import { CreateBookDTO } from './dtos/create-book.dto';
 
 @Controller('books')
 export class BooksController {
@@ -21,5 +24,10 @@ export class BooksController {
     const book = await this.booksService.getById(id);
     if (!book) throw new NotFoundException('Book not found');
     return book;
+  }
+
+  @Post('/')
+  create(@Body() bookData: CreateBookDTO) {
+    return this.booksService.create(bookData);
   }
 }
