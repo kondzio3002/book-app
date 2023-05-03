@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString, Length } from "class-validator";
+import { Match } from "src/utils/match.decorator";
 
 class RegisterDTO {
   @IsNotEmpty()
@@ -10,5 +11,9 @@ class RegisterDTO {
   @Length(5, 40)
   password: string;
 
-  
+  @IsNotEmpty()
+  @IsString()
+  @Length(5, 40)
+  @Match('password')
+  passwordRepeat: string;
 }
